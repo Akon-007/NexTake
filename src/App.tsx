@@ -10,10 +10,43 @@ import { Footer } from './components/Footer';
 import { SavedStoriesDrawer } from './components/SavedStoriesDrawer';
 import { DailyEditModal } from './components/DailyEditModal';
 import { ContactModal } from './components/ContactModal';
+import { PostingsPortal } from './components/PostingsPortal';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenView>('home');
   const [selectedArticleId, setSelectedArticleId] = useState<string>('dispatch-842');
+
+  const syncCurrentScreenFromPath = () => {
+    const path = window.location.pathname;
+    if (path === '/postings') {
+      return;
+    }
+    if (path.startsWith('/article/')) {
+      setCurrentScreen('article');
+      return;
+    }
+    if (path === '/explore') {
+      setCurrentScreen('explore');
+      return;
+    }
+    if (path === '/shorts') {
+      setCurrentScreen('shorts');
+      return;
+    }
+    if (path === '/interview') {
+      setCurrentScreen('interview');
+      return;
+    }
+    setCurrentScreen('home');
+  };
+
+  useEffect(() => {
+    syncCurrentScreenFromPath();
+    const onPopState = () => syncCurrentScreenFromPath();
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   const [savedIds, setSavedIds] = useState<string[]>([
     'dispatch-842',
     'search-top',
@@ -45,6 +78,22 @@ export default function App() {
         setSelectedArticleId(param);
       }
     }
+
+    if (screen === 'home') {
+      window.history.pushState({}, '', '/');
+    } else if (screen === 'explore') {
+      window.history.pushState({}, '', '/explore');
+    } else if (screen === 'shorts') {
+      window.history.pushState({}, '', '/shorts');
+    } else if (screen === 'interview') {
+      window.history.pushState({}, '', '/interview');
+    } else if (screen === 'article') {
+      const articleId = param ?? selectedArticleId;
+      window.history.pushState({}, '', `/article/${articleId}`);
+    } else if (screen === 'postings') {
+      window.history.pushState({}, '', '/postings');
+    }
+
     setCurrentScreen(screen);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -58,6 +107,10 @@ export default function App() {
   const handleRemoveSave = (id: string) => {
     setSavedIds((prev) => prev.filter((item) => item !== id));
   };
+
+  if (window.location.pathname === '/postings') {
+    return <PostingsPortal />;
+  }
 
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans selection:bg-emerald-400 selection:text-slate-950">
