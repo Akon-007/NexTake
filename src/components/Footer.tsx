@@ -217,11 +217,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenDailyEdit, onO
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
             <a
-              href="mailto:contact@nextedit.media"
+              href="mailto:glinttechdev@gmail.com"
               className="px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-mono text-xs flex items-center space-x-2 transition-colors"
             >
               <Mail className="w-3.5 h-3.5 text-emerald-400" />
-              <span>contact@nextedit.media</span>
+              <span>glinttechdev@gmail.com</span>
             </a>
           </div>
         </div>
