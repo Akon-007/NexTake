@@ -203,6 +203,8 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
                 <img
                   src={short.thumbnail}
                   alt={short.title}
+                  loading="lazy"
+                  decoding="async"
                   className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>

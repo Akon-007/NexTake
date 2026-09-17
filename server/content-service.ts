@@ -4,13 +4,41 @@ import { ContentRecord, ContentStatus, ContentType, normalizeSlug } from './cont
 
 const contentTable = 'content';
 
+const withUniqueSlug = async (baseSlug: string, ignoreId?: string) => {
+  let slug = normalizeSlug(baseSlug || 'untitled');
+  if (!slug) {
+    slug = 'untitled';
+  }
+
+  let candidate = slug;
+  let suffix = 2;
+
+  while (true) {
+    if (!pool) {
+      return candidate;
+    }
+
+    const existing = await pool.query(
+      `SELECT id FROM ${contentTable} WHERE slug = $1 AND id <> COALESCE($2, '00000000-0000-0000-0000-000000000000') LIMIT 1`,
+      [candidate, ignoreId ?? null],
+    );
+
+    if (!existing.rows[0]) {
+      return candidate;
+    }
+
+    candidate = `${slug}-${suffix}`;
+    suffix += 1;
+  }
+};
+
 export const createContentRecord = async (input: Partial<ContentRecord> & Pick<ContentRecord, 'title' | 'description' | 'body'>) => {
   if (!pool) {
     return null;
   }
 
   const now = new Date().toISOString();
-  const slug = normalizeSlug(String(input.slug ?? input.title ?? 'untitled'));
+  const slug = await withUniqueSlug(String(input.slug ?? input.title ?? 'untitled'));
   const id = crypto.randomUUID();
 
   const result = await pool.query(
@@ -120,7 +148,7 @@ export const updateContentRecord = async (id: string, input: Partial<ContentReco
     return null;
   }
 
-  const nextSlug = input.slug ? normalizeSlug(String(input.slug)) : current.rows[0].slug;
+  const nextSlug = input.slug ? await withUniqueSlug(String(input.slug), id) : current.rows[0].slug;
   const nextStatus = input.status ?? current.rows[0].status;
   const nextPublishedAt = input.publishedAt ?? current.rows[0].published_at ?? null;
 

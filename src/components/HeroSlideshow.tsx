@@ -15,7 +15,7 @@ interface HeroSlideshowProps {
   onToggleSave?: (id: string) => void;
 }
 
-const SLIDE_DURATION_MS = 7000; // 7 seconds per slide
+const SLIDE_DURATION_MS = 12000; // 12 seconds per slide to reduce unnecessary re-renders
 
 export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
   onNavigate,
@@ -36,7 +36,7 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
   useEffect(() => {
     if (isPaused) return;
 
-    const intervalMs = 50;
+    const intervalMs = 100;
     const increment = (intervalMs / SLIDE_DURATION_MS) * 100;
 
     const timer = setInterval(() => {
@@ -50,7 +50,7 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
     }, intervalMs);
 
     return () => clearInterval(timer);
-  }, [isPaused, totalSlides, activeIdx]);
+  }, [isPaused, totalSlides]);
 
   // Handle manual selection from sidebar or gestures
   const handleSelectSlide = (idx: number) => {
@@ -194,6 +194,8 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
                     key={currentStory.id + '-img'}
                     src={currentStory.image}
                     alt={currentStory.headline}
+                    loading="lazy"
+                    decoding="async"
                     initial={{ opacity: 0.3, scale: 1.01 }}
                     animate={{ opacity: 0.9, scale: 1 }}
                     exit={{ opacity: 0.2 }}

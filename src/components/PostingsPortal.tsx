@@ -20,20 +20,25 @@ interface ContentItem {
 }
 
 const defaultForm = {
-  title: 'New NextEdit dispatch',
-  description: 'A short summary for the public listing.',
-  body: 'This is a draft story for the newsroom.',
+  title: '',
+  description: '',
+  body: '',
   contentType: 'blog',
-  status: 'draft',
+  status: 'published',
   author: 'Glint',
-  category: 'News',
-  tags: 'ai, policy, newsroom',
+  category: '',
+  tags: '',
   coverImage: '',
   externalLink: '',
   videoUrl: '',
   scheduledFor: '',
-  featured: false,
-  featuredPriority: 0,
+  featured: true,
+  featuredPriority: 10,
+};
+
+const suggestionPreview = {
+  title: 'The next wave of AI is already changing how operators work',
+  description: 'A practical look at how autonomous systems, governance layers, and operator design are reshaping enterprise execution across high-trust teams.',
 };
 
 const fetchJson = async (path: string, options: RequestInit = {}) => {
@@ -61,6 +66,8 @@ export const PostingsPortal: React.FC = () => {
   const [adminName, setAdminName] = useState('');
   const [items, setItems] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
   const [form, setForm] = useState(defaultForm);
 
   const loadContent = async () => {
@@ -156,6 +163,16 @@ export const PostingsPortal: React.FC = () => {
     setForm((current) => ({ ...current, [key]: value }));
   };
 
+  const handleFieldFocus = (key: string) => {
+    setFocusedField(key);
+    setShowHint(true);
+  };
+
+  const handleFieldBlur = () => {
+    setFocusedField(null);
+    setShowHint(false);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#f8fafc] text-slate-900">
@@ -221,8 +238,8 @@ export const PostingsPortal: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-xs font-mono font-bold tracking-[0.2em] text-slate-400 uppercase">Dashboard</p>
-            <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Content publishing</h1>
+            <p className="text-xs font-mono font-bold tracking-[0.2em] text-slate-400 uppercase">Publishing dashboard</p>
+            <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Publish to the public site</h1>
           </div>
 
           <div className="flex items-center gap-3">
@@ -240,19 +257,41 @@ export const PostingsPortal: React.FC = () => {
         </div>
 
         <div className="grid gap-8 xl:grid-cols-[1.25fr_0.75fr]">
-          <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-center justify-between border-b border-slate-200 pb-4">
-              <h2 className="text-xl font-black text-slate-950">Draft editor</h2>
-              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-mono font-bold uppercase text-slate-600">
-                {form.status}
-              </span>
-            </div>
+          <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.75),rgba(248,250,252,0.95))]" />
+            {showHint && focusedField && (
+              <div className="pointer-events-none absolute inset-x-5 bottom-6 rounded-2xl border border-slate-200/80 bg-white/35 p-4 shadow-[0_12px_28px_rgba(15,23,42,0.04)] backdrop-blur-[1px] opacity-90">
+                <div className="flex items-center justify-between gap-3 pb-2">
+                  <span className="rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-emerald-700">
+                    Suggestion
+                  </span>
+                  <span className="text-[10px] font-mono uppercase text-slate-400">Example</span>
+                </div>
+                <div className="mb-2 h-2.5 w-16 rounded-full bg-slate-200/70" />
+                <h3 className="max-w-md text-lg font-black tracking-tight text-slate-500">{suggestionPreview.title}</h3>
+                <p className="mt-2 max-w-lg text-sm leading-6 text-slate-400">{suggestionPreview.description}</p>
+              </div>
+            )}
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="relative z-10">
+              <div className="mb-5 flex items-center justify-between border-b border-slate-200 pb-4">
+                <div>
+                  <h2 className="text-xl font-black text-slate-950">Publishing editor</h2>
+                  <p className="mt-1 text-xs text-slate-500">Anything published here appears on the public interface.</p>
+                </div>
+                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-mono font-bold uppercase text-slate-600">
+                  {form.status}
+                </span>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
               <label className="block text-sm font-medium text-slate-700 md:col-span-2">
                 Title
                 <input
                   value={form.title}
+                  placeholder="Write a headline for your story"
+                  onFocus={() => handleFieldFocus('title')}
+                  onBlur={handleFieldBlur}
                   onChange={(event) => handleFieldChange('title', event.target.value)}
                   className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-emerald-500"
                 />
@@ -262,6 +301,9 @@ export const PostingsPortal: React.FC = () => {
                 Description
                 <textarea
                   value={form.description}
+                  placeholder="Add a short summary for the public listing"
+                  onFocus={() => handleFieldFocus('description')}
+                  onBlur={handleFieldBlur}
                   onChange={(event) => handleFieldChange('description', event.target.value)}
                   className="mt-2 min-h-24 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-emerald-500"
                 />
@@ -271,6 +313,9 @@ export const PostingsPortal: React.FC = () => {
                 Body
                 <textarea
                   value={form.body}
+                  placeholder="Write the story, memo, update, or announcement"
+                  onFocus={() => handleFieldFocus('body')}
+                  onBlur={handleFieldBlur}
                   onChange={(event) => handleFieldChange('body', event.target.value)}
                   className="mt-2 min-h-40 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-emerald-500"
                 />
@@ -389,15 +434,16 @@ export const PostingsPortal: React.FC = () => {
                   className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-emerald-500"
                 />
               </label>
+              </div>
             </div>
 
-            <div className="mt-6 flex gap-3">
+            <div className="relative z-10 mt-6 flex gap-3">
               <button
                 type="button"
                 onClick={handleCreateContent}
                 className="rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-600"
               >
-                Save and publish
+                Publish to public site
               </button>
               <button
                 type="button"
@@ -410,12 +456,12 @@ export const PostingsPortal: React.FC = () => {
           </section>
 
           <aside className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-xl font-black text-slate-950">Content queue</h2>
+            <h2 className="text-xl font-black text-slate-950">Public content queue</h2>
 
             <div className="mt-5 space-y-3">
               {items.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">
-                  No content yet.
+                  No public content yet. Published stories will appear here.
                 </div>
               ) : (
                 items.map((item) => (

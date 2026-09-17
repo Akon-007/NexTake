@@ -428,7 +428,8 @@ app.post('/api/admin/content', requireAdmin, async (request, response) => {
   }
 
   const now = new Date().toISOString();
-  const slug = normalizeSlug(String(payload.slug ?? title));
+  const requestedSlug = String(payload.slug ?? title).trim();
+  const slug = requestedSlug ? normalizeSlug(requestedSlug) : normalizeSlug(title);
 
   const status = (payload.status ?? 'draft') as ContentStatus;
   const item: ContentItem = {
@@ -458,7 +459,10 @@ app.post('/api/admin/content', requireAdmin, async (request, response) => {
     response.status(201).json({ ok: true, item: persisted });
   } catch (error) {
     console.error('[content] create failed', error);
-    response.status(500).json({ ok: false, message: 'Could not create content.' });
+    const message = error instanceof Error && /duplicate key|content_slug_key|23505/i.test(error.message)
+      ? 'A story with a similar title already exists. Please change the title or slug.'
+      : 'Could not create content.';
+    response.status(409).json({ ok: false, message });
   }
 });
 
@@ -477,6 +481,14 @@ app.put('/api/admin/content/:id', requireAdmin, async (request, response) => {
       slug: normalizeSlug(String(request.body?.slug ?? existing.slug)),
     } as ContentItem;
 
+    if (request.body?.slug) {
+      next.slug = normalizeSlug(String(request.body.slug));
+    }
+
+    if (!next.slug || next.slug === 'untitled') {
+      next.slug = normalizeSlug(existing.title);
+    }
+
     if (next.status === 'published' && !next.publishedAt) {
       next.publishedAt = new Date().toISOString();
     }
@@ -485,7 +497,10 @@ app.put('/api/admin/content/:id', requireAdmin, async (request, response) => {
     response.json({ ok: true, item: updated });
   } catch (error) {
     console.error('[content] update failed', error);
-    response.status(500).json({ ok: false, message: 'Could not update content.' });
+    const message = error instanceof Error && /duplicate key|content_slug_key|23505/i.test(error.message)
+      ? 'A story with this slug already exists. Please change the title or slug.'
+      : 'Could not update content.';
+    response.status(409).json({ ok: false, message });
   }
 });
 
