@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 500" width="1800" height="500">
+  <!-- Pure White Canvas -->
+  <rect width="1800" height="500" fill="#FFFFFF"/>
+
+  <!-- Centered NEXTAKE -->
+  <text x="900" y="270" text-anchor="middle" font-family="'Inter', 'Liberation Sans', sans-serif" font-weight="900" font-size="200" letter-spacing="-3">
+    <tspan fill="#070F22">NEXT</tspan><tspan fill="#00F2AA">AKE</tspan>
+  </text>
+
+  <!-- Centered Tagline -->
+  <text x="900" y="355" text-anchor="middle" font-family="'Inter', 'Liberation Sans', sans-serif" font-weight="700" font-size="34" letter-spacing="12" fill="#070F22">TECHNOLOGY NEWS. INTELLIGENTLY CURATED.</text>
+</svg>

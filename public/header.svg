@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 560" width="2048" height="560">
+  <!-- Left NT Glyph -->
+  <g transform="translate(40, 20) scale(0.50)">
+    
+<g id="nt-brand-glyph">
+  <!-- 1. Green Accent Polygon: Layered ON TOP of the 'T' crossbar -->
+  <polygon 
+    points="435,190 575,288 705,380 515,380 435,310" 
+    fill="#3DF2AC" 
+  />
+
+  <!-- 2. 'T' Top Horizontal Crossbar: Meets the green diagonal cut at 575,288 -> 705,380 -->
+  <polygon 
+    points="575,288 830,288 830,380 705,380" 
+    fill="#FFFFFF" 
+  />
+
+  <!-- 3. 'T' Vertical Stem: Separated by horizontal dark gap below crossbar -->
+  <polygon 
+    points="625,435 735,435 735,685 625,765" 
+    fill="#FFFFFF" 
+  />
+
+  <!-- 4. 'N' Left Pillar and Upper Diagonal Arm: Solid white structure -->
+  <polygon 
+    points="194,345 288,296 550,530 550,660 456,585 288,446 288,746 194,746" 
+    fill="#FFFFFF" 
+  />
+
+  <!-- 5. 'N' Lower Diagonal Ribbon: WIDER stroke width matching the uploaded icon -->
+  <!-- Left vertical edge: 365,580 to 365,715 (width ~95px perpendicular) -->
+  <!-- Top diagonal: 365,580 to 575,745 -->
+  <!-- Bottom-right angled edge: 508,832 up-right to 575,785 -->
+  <!-- Bottom diagonal: 365,715 to 508,832 -->
+  <polygon 
+    points="365,580 575,745 575,785 508,832 365,715" 
+    fill="#FFFFFF" 
+  />
+</g>
+
+  </g>
+
+  <!-- NEXT (White) + AKE (Mint) -->
+  <text x="560" y="315" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="190" letter-spacing="-2" fill="#FFFFFF">
+    NEXT<tspan fill="#3DF2AC">AKE</tspan>
+  </text>
+
+  <!-- Tagline: TECHNOLOGY NEWS. INTELLIGENTLY CURATED. -->
+  <text x="565" y="390" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="35" letter-spacing="12" fill="#CBD5E1">
+    TECHNOLOGY NEWS. INTELLIGENTLY CURATED.
+  </text>
+</svg>
