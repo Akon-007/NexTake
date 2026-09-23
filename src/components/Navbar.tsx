@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScreenView } from '../types';
 import { Search, Bookmark, Check, Shield, Bell, User } from 'lucide-react';
+import logo from "../Pic/Logo.png";
 
 interface NavbarProps {
   currentScreen: ScreenView;
@@ -32,8 +33,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center space-x-2 text-left focus:outline-none group"
             id="brand-logo-btn"
           >
-            <span className="text-xl sm:text-2xl font-black tracking-tighter text-white group-hover:text-emerald-400 transition-colors">
-              Next Edit
+            <span className="text-xl sm:text-2xl font-black tracking-tighter text-white group-hover:text-emerald-400 transition-colors w-30">
+             <img src={logo} alt="" />
             </span>
           </button>
         </div>
