@@ -9,6 +9,7 @@ import {
 
 import { ScreenView, HeroSlideStory } from "../types";
 import { getPublishedArticles } from "../lib/articles";
+import { HERO_SLIDESHOW_STORIES } from "../data/mockData";
 
 interface HeroSlideshowProps {
   onNavigate: (screen: ScreenView, param?: string) => void;
@@ -62,36 +63,42 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
    * CONVERT SUPABASE ARTICLES TO HERO STORIES
    * =========================================================
    */
-  const stories: HeroSlideStory[] = articles.map((article, index) => ({
-    id: article.id,
-    articleId: article.id,
+  const stories: HeroSlideStory[] = articles.length
+    ? articles.map((article, index) => ({
+        id: article.id,
+        articleId: article.id,
 
-    number: String(index + 1).padStart(2, "0"),
+        number: String(index + 1).padStart(2, "0"),
 
-    category: article.category,
+        category: article.category,
 
-    headline: article.title,
+        headline: article.title,
 
-    summary: article.excerpt,
+        summary: article.excerpt,
 
-    image: article.image,
+        date: article.created_at
+          ? new Date(article.created_at).toLocaleDateString()
+          : "",
 
-    readTime: article.read_time || "5 min read",
+        image: article.image,
 
-    updatedAgo: article.created_at
-      ? new Date(article.created_at).toLocaleDateString()
-      : "",
+        readTime: article.read_time || "5 min read",
 
-    imageAperture: "",
+        updatedAgo: article.created_at
+          ? new Date(article.created_at).toLocaleDateString()
+          : "",
 
-    author: {
-      name: article.author || "Next Edit",
-      role: article.author_role || "Contributor",
-      avatar:
-        article.avatar ||
-        "https://ui-avatars.com/api/?name=Next+Edit",
-    },
-  }));
+        imageAperture: "",
+
+        author: {
+          name: article.author || "Next Edit",
+          role: article.author_role || "Contributor",
+          avatar:
+            article.avatar ||
+            "https://ui-avatars.com/api/?name=Next+Edit",
+        },
+      }))
+    : HERO_SLIDESHOW_STORIES;
 
   const totalSlides = stories.length;
   const currentStory = stories[activeIdx];
