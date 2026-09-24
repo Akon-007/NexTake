@@ -1,6 +1,10 @@
 import { supabase } from "./supabase";
 
 export async function getPublishedArticles() {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("articles")
     .select("*")

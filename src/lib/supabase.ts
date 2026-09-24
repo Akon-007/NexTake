@@ -1,12 +1,33 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 
-export const supabase = createClient(
-  supabaseUrl,
-  supabaseAnonKey
-);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// --------------------------------------
+// Article Types
+// --------------------------------------
+
+export interface Article {
+  id: string;
+  title: string;
+  category?: string;
+  excerpt?: string;
+  description?: string;
+  content?: string;
+  author?: string;
+  avatar?: string;
+  image?: string;
+  date?: string;
+  readTime?: string;
+  read_time?: string;
+  type?: string;
+  topic?: string;
+  status?: string;
+  created_at?: string;
+  heroAperture?: string;
+}
 
 // --------------------------------------
 // Daily Editorial
@@ -40,41 +61,46 @@ export async function getDailyEditItems(): Promise<DailyEditItem[]> {
     num: String(index + 1).padStart(2, "0"),
     tag: article.category ?? "General",
     timeAgo: formatTimeAgo(article.created_at),
-    readTime: article.read_time ?? "3 min read",
+    readTime: article.read_time ?? article.readTime ?? "3 min read",
     title: article.title ?? "",
-    description:
-      article.excerpt ??
-      article.description ??
-      "",
+    description: article.excerpt ?? article.description ?? "",
   }));
 }
 
-function formatTimeAgo(dateString: string): string {
+// --------------------------------------
+// Time Formatting
+// --------------------------------------
+
+export function formatTimeAgo(dateString?: string | null): string {
   if (!dateString) return "";
 
   const date = new Date(dateString);
-  const now = new Date();
+  if (isNaN(date.getTime())) return "";
 
-  const difference = Math.floor(
-    (now.getTime() - date.getTime()) / 1000
-  );
+  const now = new Date();
+  const difference = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (difference < 60) {
+    return "just now";
+  }
 
   const minutes = Math.floor(difference / 60);
-
   if (minutes < 60) {
-    return `${Math.max(minutes, 1)}m ago`;
+    return `${minutes}m ago`;
   }
 
   const hours = Math.floor(minutes / 60);
-
   if (hours < 24) {
     return `${hours}h ago`;
   }
 
   const days = Math.floor(hours / 24);
-
   return `${days}d ago`;
 }
+
+// --------------------------------------
+// Daily Edit Settings
+// --------------------------------------
 
 export interface DailyEditSettings {
   id?: string;
@@ -115,6 +141,11 @@ export async function getDailyEditSettings(): Promise<DailyEditSettings | null> 
 
   return data;
 }
+
+// --------------------------------------
+// Latest Articles
+// --------------------------------------
+
 export interface LatestArticle {
   id: string;
   title: string;
@@ -143,29 +174,33 @@ export async function getLatestArticles(): Promise<LatestArticle[]> {
     id: article.id,
     title: article.title ?? "",
     category: article.category ?? "General",
-    description:
-      article.excerpt ??
-      article.description ??
-      "",
+    description: article.excerpt ?? article.description ?? "",
     timeAgo: formatTimeAgo(article.created_at),
-    readTime: article.read_time ?? "3 min read",
+    readTime: article.read_time ?? article.readTime ?? "3 min read",
     type: article.type ?? "Dispatches",
     topic: article.topic ?? article.category ?? "General",
     created_at: article.created_at,
   }));
 }
-export async function getArticleById(id: string) {
+
+// --------------------------------------
+// Single Article
+// --------------------------------------
+
+export async function getArticleById(id: string): Promise<Article | null> {
+  if (!id) return null;
+
   const { data, error } = await supabase
     .from("articles")
     .select("*")
     .eq("id", id)
     .eq("status", "published")
-    .single();
+    .maybeSingle();
 
   if (error) {
-    console.error("Error loading article:", error);
+    console.error("Error loading article by ID:", error);
     return null;
   }
 
-  return data;
+  return data as Article | null;
 }
