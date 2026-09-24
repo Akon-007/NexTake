@@ -235,7 +235,7 @@ useEffect(() => {
   dailyEditItems.map((item) => (
     <div
       key={item.id}
-      onClick={() => onNavigate('article', item.id)}
+     
       className="bg-white p-4 rounded-lg border border-slate-200 hover:border-slate-400 hover:shadow-sm transition-all flex flex-col justify-between cursor-pointer group"
     >
       <div>

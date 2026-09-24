@@ -45,10 +45,10 @@ export interface DailyEditItem {
 
 export async function getDailyEditItems(): Promise<DailyEditItem[]> {
   const { data, error } = await supabase
-    .from("articles")
+    .from("daily_tips")
     .select("*")
     .eq("status", "published")
-    .order("created_at", { ascending: false })
+    .order("published_at", { ascending: false })
     .limit(5);
 
   if (error) {
@@ -56,15 +56,20 @@ export async function getDailyEditItems(): Promise<DailyEditItem[]> {
     return [];
   }
 
-  return (data ?? []).map((article, index) => ({
-    id: article.id,
-    num: String(index + 1).padStart(2, "0"),
-    tag: article.category ?? "General",
-    timeAgo: formatTimeAgo(article.created_at),
-    readTime: article.read_time ?? article.readTime ?? "3 min read",
-    title: article.title ?? "",
-    description: article.excerpt ?? article.description ?? "",
-  }));
+  return (data ?? []).map((tip, index) => {
+    const wordCount = (tip.content ?? "").trim().split(/\s+/).filter(Boolean).length;
+    const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
+
+    return {
+      id: tip.id,
+      num: String(index + 1).padStart(2, "0"),
+      tag: tip.category ?? "General",
+      timeAgo: formatTimeAgo(tip.published_at ?? tip.created_at),
+      readTime,
+      title: tip.title ?? "",
+      description: tip.content ?? "",
+    };
+  });
 }
 
 // --------------------------------------
