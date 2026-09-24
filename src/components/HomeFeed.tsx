@@ -5,7 +5,7 @@ import { HeroSlideshow } from './HeroSlideshow';
 import {
   FEATURED_ARTICLE,
   SHORTS_LIST,
-  FEATURED_INTERVIEW,
+  SOAIR_INTERVIEW,
   DAILY_EDIT_ITEMS,
   BIG_STORY,
   LATEST_DISPATCHES,
@@ -21,7 +21,6 @@ import {
   Check,
   ChevronRight,
   ChevronLeft,
-  Headphones,
   SlidersHorizontal,
   Plus,
   ExternalLink,
@@ -552,32 +551,32 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
           </div>
 
           <button
-            onClick={() => onNavigate('interview')}
+            onClick={() => window.open('https://www.youtube.com/@SoAIR_AFRICA/featured', '_blank', 'noopener,noreferrer')}
             className="text-xs font-mono font-bold text-emerald-700 hover:text-emerald-800 transition-colors flex items-center space-x-1"
           >
-            <span>View all interviews</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>More</span>
+            <ExternalLink className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Featured Interview Card (Dario Amodei) */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm mb-8">
+        {/* Featured Interview Card — hardcoded SOAIR YouTube video (the only interview shown) */}
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center p-6 sm:p-8">
             {/* Thumbnail with Play Trigger */}
             <div
-              onClick={() => onNavigate('interview')}
+              onClick={() => window.open('https://youtu.be/3dcSPIx-eHk', '_blank', 'noopener,noreferrer')}
               className="lg:col-span-6 relative rounded-lg overflow-hidden bg-slate-950 aspect-video group cursor-pointer"
             >
               <img
-                src={FEATURED_INTERVIEW.thumbnail}
-                alt={FEATURED_INTERVIEW.title}
+                src={SOAIR_INTERVIEW.thumbnail}
+                alt={SOAIR_INTERVIEW.title}
                 className="w-full h-full object-cover opacity-80 group-hover:scale-102 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
 
               <div className="absolute top-3 left-3">
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/70 text-emerald-400 border border-emerald-500/40">
-                  Episode #42 • 4K HDR
+                  SOAIR Cybersecurity Guide
                 </span>
               </div>
 
@@ -589,7 +588,7 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
 
               <div className="absolute bottom-3 right-3">
                 <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-black/80 text-white">
-                  35:45 min
+                  {SOAIR_INTERVIEW.duration} min
                 </span>
               </div>
             </div>
@@ -601,124 +600,41 @@ export const HomeFeed: React.FC<HomeFeedProps> = ({
               </div>
 
               <h3
-                onClick={() => onNavigate('interview')}
+                onClick={() => window.open('https://youtu.be/3dcSPIx-eHk', '_blank', 'noopener,noreferrer')}
                 className="text-xl sm:text-2xl font-black tracking-tight text-slate-950 hover:text-emerald-700 transition-colors cursor-pointer leading-tight"
               >
-                {FEATURED_INTERVIEW.title}
+                {SOAIR_INTERVIEW.title}
               </h3>
 
               <div className="flex items-center space-x-3 py-1">
                 <img
-                  src={FEATURED_INTERVIEW.guest.avatar}
-                  alt={FEATURED_INTERVIEW.guest.name}
+                  src={SOAIR_INTERVIEW.avatar}
+                  alt={SOAIR_INTERVIEW.channel}
                   className="w-10 h-10 rounded-full object-cover border border-slate-300"
                 />
                 <div>
                   <h4 className="text-xs font-bold text-slate-900 font-mono">
-                    {FEATURED_INTERVIEW.guest.name}
+                    {SOAIR_INTERVIEW.channel}
                   </h4>
                   <p className="text-[11px] text-slate-500">
-                    {FEATURED_INTERVIEW.guest.role}, {FEATURED_INTERVIEW.guest.company}
+                    {SOAIR_INTERVIEW.channelHandle} • {SOAIR_INTERVIEW.channelAbout} • {SOAIR_INTERVIEW.publishedAt}
                   </p>
                 </div>
               </div>
 
               <p className="text-xs text-slate-600 leading-relaxed">
-                In this deep-dive conversation, Dario discusses recursive self-improvement guardrails, compute scaling walls, and how Anthropic plans to manage the emergence of autonomous code synthesizers.
+                {SOAIR_INTERVIEW.description}
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
-                  onClick={() => onNavigate('interview')}
+                  onClick={() => window.open('https://youtu.be/3dcSPIx-eHk', '_blank', 'noopener,noreferrer')}
                   className="inline-flex items-center space-x-2 px-4 py-2 rounded bg-slate-950 text-white text-xs font-mono font-bold hover:bg-emerald-600 transition-colors"
                 >
-                  <Headphones className="w-3.5 h-3.5" />
-                  <span>Listen to audio dispatch</span>
-                </button>
-
-                <button
-                  onClick={() => onNavigate('interview')}
-                  className="inline-flex items-center space-x-1.5 px-3 py-2 rounded border border-slate-300 text-slate-700 text-xs font-mono hover:bg-slate-50 transition-colors"
-                >
-                  <span>Full transcript</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Watch on YouTube</span>
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 3 Secondary Interview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div
-            onClick={() => onNavigate('interview')}
-            className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-400 transition-all cursor-pointer group"
-          >
-            <div className="aspect-video bg-slate-900 relative">
-              <img
-                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80"
-                alt="Fei-Fei Li"
-                className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform"
-              />
-              <span className="absolute bottom-2 right-2 text-[10px] font-mono bg-black/80 text-white px-1.5 py-0.5 rounded">
-                28:15 min
-              </span>
-            </div>
-            <div className="p-4 space-y-1">
-              <span className="text-[10px] font-mono text-emerald-700 font-bold">
-                Fei-Fei Li • Stanford / World Labs
-              </span>
-              <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                The Future of Human-AI Interaction Models
-              </h4>
-            </div>
-          </div>
-
-          <div
-            onClick={() => onNavigate('interview')}
-            className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-400 transition-all cursor-pointer group"
-          >
-            <div className="aspect-video bg-slate-900 relative">
-              <img
-                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=80"
-                alt="Patrick Collison"
-                className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform"
-              />
-              <span className="absolute bottom-2 right-2 text-[10px] font-mono bg-black/80 text-white px-1.5 py-0.5 rounded">
-                34:20 min
-              </span>
-            </div>
-            <div className="p-4 space-y-1">
-              <span className="text-[10px] font-mono text-emerald-700 font-bold">
-                Patrick Collison • Stripe
-              </span>
-              <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                The Programmable Economy and Autonomous Agent Billing
-              </h4>
-            </div>
-          </div>
-
-          <div
-            onClick={() => onNavigate('interview')}
-            className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-400 transition-all cursor-pointer group"
-          >
-            <div className="aspect-video bg-slate-900 relative">
-              <img
-                src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80"
-                alt="Jensen Huang"
-                className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform"
-              />
-              <span className="absolute bottom-2 right-2 text-[10px] font-mono bg-black/80 text-white px-1.5 py-0.5 rounded">
-                32:50 min
-              </span>
-            </div>
-            <div className="p-4 space-y-1">
-              <span className="text-[10px] font-mono text-emerald-700 font-bold">
-                Jensen Huang • Nvidia
-              </span>
-              <h4 className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                Accelerated Computing and the Next Industrial Revolution
-              </h4>
             </div>
           </div>
         </div>
