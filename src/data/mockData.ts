@@ -469,6 +469,25 @@ export const SHORTS_LIST: ShortItem[] = [
   },
 ];
 
+// Interview section data — hardcoded SOAIR YouTube video (the only item shown in the section)
+export const SOAIR_INTERVIEW = {
+  id: 'soair-cybersecurity-guide-3dcSPIx-eHk',
+  // The only video featured in the Interviews section
+  videoUrl: 'https://youtu.be/3dcSPIx-eHk',
+  // The SOAIR Africa YouTube account linked from the section's "More" button
+  channelUrl: 'https://www.youtube.com/@SoAIR_AFRICA/featured',
+  title: 'SOAIR Cybersecurity Guide: OWASP Top 10, SQL Injection, XSS & DVWA',
+  channel: 'SOAIR',
+  channelHandle: '@SoAIR_AFRICA',
+  channelAbout: 'School of Artificial Intelligence and Robotics',
+  description:
+    "Welcome to the SOAIR Cybersecurity Guide! In this video, we'll cover the OWASP Top 10 vulnerabilities, delve into SQL Injection and Cross-Site Scripting (XSS), and explore practical examples using DVWA (Damn Vulnerable Web Application). Stay tuned for more cybersecurity insights and hands-on techniques!",
+  thumbnail: 'https://i.ytimg.com/vi/3dcSPIx-eHk/maxresdefault.jpg',
+  avatar: 'https://i.ytimg.com/vi/3dcSPIx-eHk/hqdefault.jpg',
+  duration: '19:29',
+  publishedAt: 'Feb 6, 2025',
+};
+
 export const FEATURED_INTERVIEW: Interview = {
   id: 'episode-42',
   episodeNumber: 42,
